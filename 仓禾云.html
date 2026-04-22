@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>仓禾云 </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f2f0eb;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        .app-container {
+            max-width: 450px;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 0 30px rgba(0,0,0,0.03);
+            min-height: 100vh;
+            border-radius: 0;
+            position: relative;
+            padding-bottom: 80px;
+            border-left: 1px solid #e8e4df;
+            border-right: 1px solid #e8e4df;
+        }
+
+        /* 顶部导航 */
+        .top-bar {
+            padding: 16px 16px 8px;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 15;
+            border-bottom: 1px solid #e0dbd4;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo-icon {
+            background: #1e3a17;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+        }
+        .logo-text {
+            font-weight: 700;
+            font-size: 20px;
+            color: #1e3a17;
+        }
+        .role-switch {
+            display: flex;
+            gap: 6px;
+            background: #f0ebe4;
+            padding: 4px;
+            border-radius: 40px;
+        }
+        .role-btn {
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: #5a6e52;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .role-btn.active {
+            background: #1e3a17;
+            color: white;
+        }
+
+        /* 内容 */
+        .content {
+            padding: 0 16px;
+        }
+
+        /* 定位条 */
+        .location-bar {
+            display: flex;
+            align-items: center;
+            background: #f4f1ec;
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin: 16px 0;
+            cursor: pointer;
+            border: 1px solid #d9d2c8;
+            transition: background 0.1s;
+        }
+        .location-bar:active { background: #e8e2d9; }
+        .location-icon { margin-right: 8px; font-size: 18px; }
+        .location-text { font-weight: 500; font-size: 17px; color: #2c3a28; }
+
+        /* 卡片通用 */
+        .section-card {
+            background: #fefdfb;
+            border-radius: 22px;
+            padding: 20px 18px;
+            margin: 20px 0;
+            border: 1px solid #e8e1d9;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: transform 0.1s;
+        }
+        .section-card:active { transform: scale(0.99); }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e2d1c;
+        }
+        .badge {
+            background: #ecf0e8;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            color: #3b5e32;
+            font-weight: 500;
+        }
+
+        /* 发布卡片 (农户端) */
+        .publish-card {
+            background: #eef0ea;
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid #cfd3c4;
+            margin-bottom: 20px;
+        }
+        .field-row {
+            margin-bottom: 18px;
+        }
+        .field-label {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1f331b;
+        }
+        .field-input {
+            width: 100%;
+            padding: 16px 18px;
+            font-size: 18px;
+            border: 1.5px solid #cfc7bd;
+            border-radius: 16px;
+            background: white;
+        }
+        .grade-selector {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .grade-btn {
+            background: white;
+            border: 1.5px solid #c7bfb4;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .grade-btn.active {
+            background: #1e3a17;
+            color: white;
+            border-color: #1e3a17;
+        }
+        .upload-area {
+            background: white;
+            border: 2px dashed #a7b89e;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #375a2e;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .preview-thumb {
+            width: 50px; height: 50px; border-radius: 12px; background: #d9c9b4;
+            display: inline-block; margin-right: 8px;
+        }
+        .big-btn {
+            background: #1e3a17;
+            color: white;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 0 #0f1f0c;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: 0.08s;
+        }
+        .big-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0f1f0c; }
+
+        /* 行情条 */
+        .price-ref {
+            background: #f8f4ee;
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin: 16px 0;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            cursor: pointer;
+        }
+        .price-item { flex: 1; }
+        .price-label { font-size: 15px; color: #6b6257; }
+        .price-num { font-size: 22px; font-weight: 800; color: #b4511a; }
+
+        /* 商户端筛选 */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 0 16px;
+        }
+        .filter-chip {
+            background: #f0ebe4;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 500;
+            white-space: nowrap;
+            border: 1px solid #dbd3c9;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .filter-chip.active {
+            background: #1e3a17;
+            color: white;
+        }
+
+        /* 商品卡片 */
+        .product-card {
+            background: white;
+            border-radius: 22px;
+            padding: 18px;
+            margin-bottom: 14px;
+            border: 1px solid #e3dacf;
+            display: flex;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .product-card:active { background: #faf7f2; }
+        .product-img {
+            width: 80px; height: 80px; background: #d9c9b4;
+            border-radius: 18px; margin-right: 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 36px;
+        }
+        .product-info { flex: 1; }
+        .product-title {
+            font-size: 19px; font-weight: 700; display: flex; justify-content: space-between;
+        }
+        .product-origin { font-size: 15px; color: #6b6257; margin: 4px 0; }
+        .product-stock { font-size: 15px; color: #3a5e2f; font-weight: 600; }
+        .product-price { font-size: 24px; font-weight: 800; color: #b4511a; }
+        .trend-mini { font-size: 13px; margin-left: 8px; }
+
+        /* 热度条 */
+        .hot-bar {
+            height: 4px; background: #e5ddd3; border-radius: 4px; margin-top: 8px;
+        }
+        .hot-fill { height: 4px; background: #c44a2a; border-radius: 4px; width: 70%; }
+
+        /* 管理端统计 */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0;
+        }
+        .stat-box {
+            background: #f3f0ea; border-radius: 20px; padding: 16px; text-align: center;
+            cursor: pointer; transition: 0.1s;
+        }
+        .stat-box:active { background: #e4ddd3; }
+        .stat-num { font-size: 32px; font-weight: 800; color: #1e3a17; }
+        .stat-label { font-size: 15px; color: #5a6e52; }
+        .trend-arrow { font-size: 18px; margin-left: 6px; }
+
+        /* 区块入口 */
+        .block-entry {
+            background: #e2d9cd; border-radius: 24px; padding: 18px; margin: 20px 0;
+            cursor: pointer; border: 1px solid #cbbaa8; transition: 0.1s;
+        }
+        .block-entry:active { background: #d4c9bb; }
+        .block-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .private-tag { background: #1e3a17; color: white; padding: 4px 12px; border-radius: 30px; font-size: 13px; }
+
+        /* 详情浮层（加强版） */
+        .detail-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); z-index: 100;
+            display: flex; align-items: flex-end;
+        }
+        .detail-panel {
+            background: white; width: 100%; max-width: 450px; margin: 0 auto;
+            border-radius: 32px 32px 0 0; padding: 24px 20px 40px;
+            animation: slideUp 0.2s; max-height: 80vh; overflow-y: auto;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .detail-close { text-align: right; font-size: 28px; margin-bottom: 10px; cursor: pointer; }
+        .chart-sim {
+            background: #f4f0ea; border-radius: 20px; padding: 20px; margin: 16px 0;
+            display: flex; align-items: flex-end; gap: 12px; height: 120px;
+        }
+        .chart-bar {
+            flex: 1; background: #a7b89e; border-radius: 8px 8px 0 0; height: var(--h);
+            min-height: 20px;
+        }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; max-width: 450px; margin: 0 auto;
+            background: #fefcf9; backdrop-filter: blur(10px);
+            display: flex; justify-content: space-around; padding: 12px 12px 24px;
+            border-top: 1px solid #dbd2c7; z-index: 30;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            font-size: 14px; color: #5f7057; font-weight: 600;
+            cursor: pointer; padding: 6px 16px; border-radius: 40px; transition: 0.1s;
+        }
+        .nav-item.active { background: #1e3a17; color: white; }
+
+        .fab {
+            position: fixed; bottom: 90px; right: calc(50% - 200px);
+            width: 64px; height: 64px; background: #1e3a17; border-radius: 40px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 36px; box-shadow: 0 6px 0 #0f1f0c;
+            cursor: pointer; z-index: 35; transition: 0.08s;
+        }
+        .fab:active { transform: translateY(3px); box-shadow: 0 3px 0 #0f1f0c; }
+
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="top-bar">
+        <div class="logo-area">
+            <div class="logo-icon">🌾</div>
+            <div class="logo-text">仓禾云</div>
+        </div>
+        <div class="role-switch" id="roleSwitch">
+            <button class="role-btn active" data-role="farmer">农户</button>
+            <button class="role-btn" data-role="merchant">商户</button>
+            <button class="role-btn" data-role="manager">管理</button>
+        </div>
+    </div>
+
+    <!-- 农户端 -->
+    <div id="farmerPage" class="page active">
+        <div class="content">
+            <div class="location-bar" onclick="showDetail('📍 当前定位','廊坊市安次区 · 杨庄 / 落垡镇<br>平台基于此区域展示行情与推荐。<br><br><b>附近收购商热力：</b><br>🔴 老张果蔬 (2.3km) 今日收购巨峰5000斤<br>🔴 惠民批发 (3.1km) 收购大白菜')">
+                <span class="location-icon">📍</span>
+                <span class="location-text">河北省 · 廊坊市 · 安次区</span>
+            </div>
+
+            <div class="publish-card">
+                <div style="font-size:22px; font-weight:700; margin-bottom:18px;">📦 极简发布 · 仅需3步</div>
+                <div class="field-row">
+                    <div class="field-label">品名 <span style="font-weight:400; font-size:15px;">(必填)</span></div>
+                    <input class="field-input" placeholder="如：巨峰葡萄" value="巨峰葡萄" id="productNameInput">
+                </div>
+                <div class="field-row">
+                    <div class="field-label">预估产量（斤）</div>
+                    <input class="field-input" placeholder="数量" value="850" id="productQtyInput">
+                </div>
+                <div class="field-row">
+                    <div class="field-label">产地位置</div>
+                    <input class="field-input" placeholder="村/组" value="安次区杨庄" id="productAddrInput">
+                </div>
+                <div class="field-row">
+                    <div class="field-label">等级规格</div>
+                    <div class="grade-selector" id="gradeGroup">
+                        <span class="grade-btn active" data-grade="一级果">一级果</span>
+                        <span class="grade-btn" data-grade="二级果">二级果</span>
+                        <span class="grade-btn" data-grade="通货">通货</span>
+                    </div>
+                </div>
+                <div class="field-row">
+                    <div class="field-label">实拍图片</div>
+                    <div class="upload-area" onclick="showDetail('📸 上传实拍','建议拍摄果实特写、包装状态。<br><br><b>已上传预览：</b><br>🍇 巨峰实拍1.jpg<br>🍇 巨峰实拍2.jpg<br>点击可继续添加。')">
+                        <span>📸</span> 点击拍照或上传 (已选2张)
+                    </div>
+                </div>
+                <div class="price-ref" onclick="showDetail('📊 行情走势','<b>近7日巨峰葡萄收购价</b><div class=\'chart-sim\'><div class=\'chart-bar\' style=\'height:60px\'></div><div class=\'chart-bar\' style=\'height:55px\'></div><div class=\'chart-bar\' style=\'height:50px\'></div><div class=\'chart-bar\' style=\'height:52px\'></div><div class=\'chart-bar\' style=\'height:48px\'></div><div class=\'chart-bar\' style=\'height:45px\'></div><div class=\'chart-bar\' style=\'height:44px\'></div></div>当前均价6.8元，较昨日↓0.3')">
+                    <div class="price-item"><span class="price-label">本地收购价</span><div class="price-num">¥6.8</div></div>
+                    <div class="price-item"><span class="price-label">较昨日</span><div class="price-num" style="color:#1f7a1f;">↓0.3</div></div>
+                </div>
+                <button class="big-btn" onclick="showDetail('✅ 发布成功','您的货源已进入「安次葡萄合作社」统计池。<br>助农代理人将统一对外报价。<br><br>预计今日内会有商户联系。')">立即发布</button>
+            </div>
+
+            <div class="section-card" onclick="showDetail('📋 订单跟踪 (DD24042201)','采购方：老张果蔬批发<br>品名：巨峰葡萄 一级果 850斤<br>金额：5525元<br><br><b>物流状态：</b> 已装车 → 运输中<br>承运：顺丰速运 · 运单号SF123456<br>预计明日14:00前送达')">
+                <div class="card-header"><h3>📋 最新订单</h3><span class="badge">运输中</span></div>
+                <div>巨峰葡萄 850斤 · 老张果蔬</div>
+                <div style="height:6px; background:#e5ddd3; border-radius:6px; margin:12px 0;"><div style="width:65%; height:6px; background:#306b28; border-radius:6px;"></div></div>
+                <div style="display:flex; justify-content:space-between; color:#5a6e52;"><span>已接单</span><span>已装车</span><span>运输中</span><span>已到货</span></div>
+            </div>
+
+            <div style="margin:16px 0; text-align:center;">
+                <span style="background:#e9e3db; padding:14px 28px; border-radius:50px; font-weight:600; cursor:pointer;" onclick="showDetail('📄 资质代办','合作机构可代办：<br>• 产地证明 50元/次<br>• 农残检测报告 50元/次<br>• 绿色食品认证咨询<br><br>提交后3个工作日内出具电子版。')">📄 申请检测/产地证明</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 商户端 -->
+    <div id="merchantPage" class="page">
+        <div class="content">
+            <div class="location-bar" onclick="showDetail('🔍 筛选区域','当前：廊坊安次区 (葡萄/蔬菜主产区)<br>可切换至其他产区：永清、固安……')">
+                <span class="location-icon">🔍</span>
+                <span class="location-text">廊坊 · 安次区 · 葡萄/蔬菜</span>
+            </div>
+            <div class="filter-bar">
+                <span class="filter-chip active" onclick="filterActive(this)">全部</span>
+                <span class="filter-chip" onclick="filterActive(this)">葡萄</span>
+                <span class="filter-chip" onclick="filterActive(this)">大白菜</span>
+                <span class="filter-chip" onclick="filterActive(this)">一级果</span>
+                <span class="filter-chip" onclick="filterActive(this)">本周上市</span>
+            </div>
+
+            <div class="product-card" onclick="showDetail('🍇 王大姐果园 · 巨峰葡萄','<b>货源详情</b><br>产地：安次区杨庄<br>等级：一级果，糖度≥16<br>可售库存：800斤<br>单价：6.3元/斤<br>历史供货稳定性92% · 品控评分4.8⭐<br><br><b>近四周价格走势</b><div class=\'chart-sim\'><div class=\'chart-bar\' style=\'height:40px\'></div><div class=\'chart-bar\' style=\'height:38px\'></div><div class=\'chart-bar\' style=\'height:35px\'></div><div class=\'chart-bar\' style=\'height:32px\'></div></div>')">
+                <div class="product-img">🍇</div>
+                <div class="product-info">
+                    <div class="product-title"><span>巨峰葡萄 一级果</span><span class="product-price">¥6.3</span></div>
+                    <div class="product-origin">王大姐果园 · 安次杨庄</div>
+                    <div class="product-stock">可售库存 800斤 · 品控4.8</div>
+                    <div class="hot-bar"><div class="hot-fill" style="width:75%"></div></div>
+                    <div style="font-size:13px; color:#8a7b6b;">近四周均价 ¥6.1-6.5 <span class="trend-mini" style="color:#1f7a1f;">▼0.2</span></div>
+                </div>
+            </div>
+            <div class="product-card" onclick="showDetail('🥬 老刘蔬菜 · 大白菜','<b>货源详情</b><br>产地：落垡镇<br>等级：通货，单棵3-4斤<br>可售库存：2000斤<br>单价：1.1元/斤<br>品控评分4.6 · 上市时间本周')">
+                <div class="product-img">🥬</div>
+                <div class="product-info">
+                    <div class="product-title"><span>大白菜 通货</span><span class="product-price">¥1.1</span></div>
+                    <div class="product-origin">老刘蔬菜 · 落垡镇</div>
+                    <div class="product-stock">可售库存 2000斤 · 品控4.6</div>
+                    <div class="hot-bar"><div class="hot-fill" style="width:40%"></div></div>
+                </div>
+            </div>
+
+            <div class="section-card" onclick="showDetail('📦 采购订单管理','当前2笔进行中：<br>1. DD01 巨峰葡萄500斤，待发货<br>2. DD02 大白菜1000斤，已签收<br><br>点击可查看物流详情、联系农户。')">
+                <div class="card-header"><h3>📦 我的采购订单</h3><span class="badge">2笔进行中</span></div>
+                <div>今日待发货：巨峰葡萄 500斤</div>
+                <div style="margin-top:12px; color:#1e3a17; font-weight:600;">查看全部订单 ></div>
+            </div>
+
+            <div style="background:#e2d9cd; border-radius:20px; padding:16px; cursor:pointer;" onclick="showDetail('🚚 智能物流比价','<b>当前订单预估 (850斤，廊坊→北京)</b><br><br>• 顺丰速运 ¥128 (时效1天) 推荐<br>• 京东快运 ¥115 (时效1.5天)<br>• 德邦大件 ¥98 (时效2天)<br><br><b>拼车方案：</b> 与附近3单合并，预估¥85，节省34%。<br><button style=\'margin-top:16px; padding:12px 24px; background:#1e3a17; color:white; border:none; border-radius:40px;\'>选择拼车</button>')">
+                <span style="font-weight:700;">🚚 发货物流推荐 (比价·拼车)</span>
+                <div style="margin-top:8px;">当前订单预估运费对比 ></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理端 -->
+    <div id="managerPage" class="page">
+        <div class="content">
+            <div style="padding:10px 0;"><h2>安次葡萄合作社 · 管理看板</h2></div>
+            <div class="stats-grid">
+                <div class="stat-box" onclick="showDetail('🌱 品种分布','巨峰葡萄 2.8万斤(12户)<br>阳光玫瑰 1.2万斤(5户)<br>夏黑 0.6万斤(3户)')">
+                    <div class="stat-num">6 <span class="trend-arrow" style="color:#2a7a2a;">↑</span></div><div class="stat-label">涉及品种</div>
+                </div>
+                <div class="stat-box" onclick="showDetail('👥 农户统计','本村已入驻28户，今日新增2户。<br>累计发布货源42条，成交31笔。')">
+                    <div class="stat-num">28</div><div class="stat-label">入驻农户</div>
+                </div>
+                <div class="stat-box" onclick="showDetail('📈 产量预估','本周预计成熟1.7万斤；下周预计2.4万斤。建议提前对接商户。')">
+                    <div class="stat-num">4.6万</div><div class="stat-label">总预估产量(斤)</div>
+                </div>
+                <div class="stat-box" onclick="showDetail('🤝 合作商户','稳定合作商户6家，今日询价3次。')">
+                    <div class="stat-num">6</div><div class="stat-label">合作商户</div>
+                </div>
+            </div>
+
+            <div class="section-card" onclick="showDetail('💰 统一报价管理','<b>当前报价策略</b><br>巨峰一级 6.5元/斤<br>巨峰二级 5.8元/斤<br>阳光玫瑰特级 14.0元/斤<br><br>可根据行情批量调整，调整后商户端实时更新。')">
+                <div class="card-header"><h3>💰 统一对外报价</h3><span>编辑</span></div>
+                <div>巨峰一级：6.5元/斤</div>
+                <div>巨峰二级：5.8元/斤</div>
+                <div>阳光玫瑰特级：14.0元/斤</div>
+            </div>
+
+            <div class="block-entry" onclick="showDetail('🔄 兜底销售管理','已标记兜底批次：<br>1. 李大叔 巨峰300斤 (可议价)<br>2. 赵婶 夏黑200斤<br><br>仅限签约收购商查看报价，点击可调整兜底状态。')">
+                <div class="block-title"><span>🔄 兜底销售批次</span><span class="private-tag">仅收购商可见</span></div>
+                <div style="margin-top:8px;">2个批次待处理</div>
+            </div>
+
+            <div class="block-entry" onclick="showDetail('🏡 李家村苹果合作社（内部区块）','成员15人 · 今日内部调货2条<br><br><b>最新动态：</b><br>• 张大哥需拼车300斤苹果<br>• 王姐可提供200斤<br>• 统一对外报价讨论中<br><br>所有信息仅圈内可见。')">
+                <div class="block-title"><span>🏡 李家村苹果合作社</span><span class="private-tag">圈内可见</span></div>
+                <div style="margin-top:8px;">今日内部调货2条，点击进入</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 + 悬浮按钮 -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="farmer" onclick="switchRole('farmer')"><span>🧑‍🌾</span>农户</div>
+        <div class="nav-item" data-page="merchant" onclick="switchRole('merchant')"><span>🏪</span>商户</div>
+        <div class="nav-item" data-page="manager" onclick="switchRole('manager')"><span>📊</span>管理</div>
+    </div>
+
+    <div class="fab" onclick="showDetail('⚡ 快捷操作','农户：快速发布货源<br>商户：发布求购需求<br>管理：调整报价/查看统计')">+</div>
+</div>
+
+<script>
+    // 角色切换
+    function switchRole(role) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(role + 'Page').classList.add('active');
+        document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.role-btn[data-role="${role}"]`).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelector(`.nav-item[data-page="${role}"]`).classList.add('active');
+    }
+
+    document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchRole(btn.dataset.role));
+    });
+
+    // 筛选标签激活
+    function filterActive(el) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    // 等级选择
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // 详情浮层（支持HTML）
+    function showDetail(title, content) {
+        let overlay = document.createElement('div'); overlay.className = 'detail-overlay';
+        overlay.innerHTML = `<div class="detail-panel"><div class="detail-close" onclick="this.parentElement.parentElement.remove()">✕</div><h3 style="font-size:24px; margin-bottom:16px;">${title}</h3><div style="font-size:17px; line-height:1.6;">${content}</div><button class="big-btn" style="margin-top:24px;" onclick="this.parentElement.parentElement.remove()">关闭</button></div>`;
+        document.body.appendChild(overlay);
+        overlay.onclick = e => { if(e.target === overlay) overlay.remove(); };
+    }
+
+    // 模拟图表条
+    window.onload = () => {};
+</script>
+</body>
+</html>
